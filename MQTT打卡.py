@@ -62,12 +62,12 @@ def quary_user(cell_phone):
     # 该功能目前不可用
     cell_phone_1 = str(cell_phone)
     msg = {}
+    msg["mid"] = get_mid()
+    msg["from"] = "3765C_21562167329C68E4"
+    msg["to"] = "system"
+    msg["time"] = get_time()
     msg['action'] = 517
     msg['data'] = {"region": "86", "mobile": cell_phone_1}
-    msg["from"] = "3765C_21562167329C68E4"
-    msg["mid"] = get_mid()
-    msg["time"] = get_time()
-    msg["to"] = "system"
     msg_json = json.dumps(msg, separators=(',', ':'))
     return msg_json
 
