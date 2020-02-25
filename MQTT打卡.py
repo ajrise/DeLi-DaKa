@@ -34,11 +34,11 @@ def syn_time():
     return msg_json
 
 
-def get_data(user_name):
+def get_data(user_id):
     """构建签到data数据"""
 
     user_temp = {"check_time": get_time(), "check_type": "fp",
-                 "user_id": "598529995907792896"}
+                 "user_id": user_id}
     user_temp1 = [user_temp]
     payload_temp = {"users": user_temp1}
     data = {"cmd": "checkin", "payload": payload_temp}
