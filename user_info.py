@@ -12,7 +12,10 @@ def add_user(new_user, new_user_id):
     user_db = load_user()
     new = {new_user: new_user_id}
     user_db.update(new)
-    
+    with open ("user.json",'w') as user_obj:
+        user_obj.write(json.dumps(user_db))
+        user_obj.close()
+    print (user_db)
 
 
 def get_user():
@@ -30,4 +33,3 @@ def get_user():
         else:
             return "quit"
 
-# print(load_user())
