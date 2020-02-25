@@ -111,7 +111,7 @@ while True:
         go_publish(make_msg("check_in"))
     elif fun_select == "3":
         go_publish(make_msg("re_check_in"))
-    elif fun_select == "q" or "Q":
+    elif fun_select == "q" or fun_select == "Q":
         sys.exit()
     else :
         print("输入错误，请重新输入！")
