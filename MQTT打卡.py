@@ -50,12 +50,13 @@ def check_in():
     """构建打卡消息数据"""
     msg = {}
     msg['action'] = 300
-    msg['data'] = get_data()
+    msg['data'] = get_data(user_info.get_user())
     msg["from"] = "3765C_21562167329C68E4"
     msg["mid"] = get_mid()
     msg["time"] = get_time()
     msg["to"] = "377900597703081984"
     msg_json = json.dumps(msg, separators=(',', ':'))
+    print(msg_json)
     return msg_json
 
 def quary_user(cell_phone):
@@ -78,8 +79,8 @@ def go_publish(GongNeng):
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
 
 
-user_info.get_user()
 
+check_in()
 #go_publish(quary_user())
 #print(quary_user())
 

@@ -21,8 +21,8 @@ def get_user():
 
     if user_name_input in user_db:
         user_id = user_db.get(user_name_input)
-        print(str(user_id))
         return user_id
+
     else:
         if input("用户不存在！是否新建用户？y/n") == "y":
             new_user_id1 = input("请输入“"+user_name_input+"”的ID：")
@@ -30,6 +30,4 @@ def get_user():
         else:
             return "quit"
 
-
-get_user()
 # print(load_user())
