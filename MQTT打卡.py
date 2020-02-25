@@ -12,11 +12,19 @@ dq_auth = {'username': '3765C',
 topic = "device"
 
 
-def get_time():
+def get_now_time():
     """获取当前时间戳"""
-    now = int(time.time())
+    time_now = int(time.time())
     # print(str(now))
-    return now
+    return time_now
+
+
+def get_time_ver():
+    """生成补卡时间"""
+    time_ver = input("请输入补卡时间：")
+    time_str = time.strptime(time_ver, "%Y-%m-%d %H:%M:%S")
+    time_stamp = int(time.mktime(time_str))
+    return time_stamp
 
 
 def get_mid():
@@ -25,34 +33,48 @@ def get_mid():
     return mid
 
 
-def syn_time():
+def make_time_syn():
     """生成同步时间代码"""
     msg = {"action": 100, "from": "3765C_21562167329C68E4",
-           "mid": get_mid(), "time": get_time(), "to": "system"}
+           "mid": get_mid(), "time": get_now_time(), "to": "system"}
     msg_json = json.dumps(msg, separators=(',', ':'))
     return msg_json
 
 
-def get_data(user_id):
+def make_checkin(user_id, ck_time):
     """构建签到data数据"""
-    user_temp = {"check_time": get_time(), "check_type": "fp",
+    if ck_time == "now":
+        time = get_now_time()
+    elif ck_time == "re_ck":
+        time = get_time_ver()
+    user_temp = {"check_time": time, "check_type": "fp",
                  "user_id": user_id}
     user_temp1 = [user_temp]
     payload_temp = {"users": user_temp1}
     data = {"cmd": "checkin", "payload": payload_temp}
-
     return data
 
 
-def check_in():
-    """构建打卡消息数据"""
+def make_msg(fun_id):
+    """构建消息data数据"""
     msg = {}
-    msg['action'] = 300
-    msg['data'] = get_data(user_info.get_user())
+    if fun_id == "check_in":
+        msg['action'] = 300
+        msg['data'] = make_checkin(user_info.get_user(), "now")
+        msg["to"] = "377900597703081984"
+        msg["time"] = get_now_time()
+    elif fun_id == "time_syn":
+        msg['action'] = 100
+        msg["to"] = "system"
+        msg["time"] = get_now_time()
+    elif fun_id == "re_check_in":
+        msg['action'] = 300
+        msg['data'] = make_checkin(user_info.get_user(), "re_ck")
+        msg["to"] = "377900597703081984"
+        msg["time"] = msg['data']['payload']['users'][0]['check_time']
+
     msg["from"] = "3765C_21562167329C68E4"
     msg["mid"] = get_mid()
-    msg["time"] = get_time()
-    msg["to"] = "377900597703081984"
     msg_json = json.dumps(msg, separators=(',', ':'))
     return msg_json
 
@@ -65,7 +87,7 @@ def quary_user(cell_phone):
     msg["mid"] = get_mid()
     msg["from"] = "3765C_21562167329C68E4"
     msg["to"] = "system"
-    msg["time"] = get_time()
+    msg["time"] = get_now_time()
     msg['action'] = 517
     msg['data'] = {"region": "86", "mobile": cell_phone_1}
     msg_json = json.dumps(msg, separators=(',', ':'))
@@ -78,6 +100,9 @@ def go_publish(GongNeng):
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
 
 
-
+#print (make_msg("time_syn"))
+#print (make_msg("check_in"))
+print (make_msg("re_check_in"))
 # go_publish(quary_user())
 # print(quary_user())
+#print (get_time_ver())
