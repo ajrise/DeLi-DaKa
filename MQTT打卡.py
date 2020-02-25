@@ -3,6 +3,7 @@ import time
 import datetime
 import json
 import random
+import user_info
 
 server = "device.delicloud.com"
 dqgzb_device = "3765C_21562167329C68E4"
@@ -58,7 +59,7 @@ def check_in():
     return msg_json
 
 def quary_user(cell_phone):
-    """通过手机号查询user_id"""
+    """通过手机号向服务器查询user_id"""
     #功能目前不可用
     cell_phone_1 = str(cell_phone)
     msg = {}
@@ -76,13 +77,8 @@ def go_publish(GongNeng):
     mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
 
-def main_input():
-    print("请输入手机号码：")
-    cell_num = input("请输入手机号码:")
-    if 
-    print (cell_num)
 
-main_cmd()
+user_info.get_user()
 
 #go_publish(quary_user())
 #print(quary_user())
