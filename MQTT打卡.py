@@ -12,7 +12,6 @@ dq_auth = {'username': '3765C',
 topic = "device"
 
 
-
 def get_time():
     """获取当前时间戳"""
     now = int(time.time())
@@ -36,7 +35,6 @@ def syn_time():
 
 def get_data(user_id):
     """构建签到data数据"""
-
     user_temp = {"check_time": get_time(), "check_type": "fp",
                  "user_id": user_id}
     user_temp1 = [user_temp]
@@ -56,22 +54,23 @@ def check_in():
     msg["time"] = get_time()
     msg["to"] = "377900597703081984"
     msg_json = json.dumps(msg, separators=(',', ':'))
-    print(msg_json)
     return msg_json
+
 
 def quary_user(cell_phone):
     """通过手机号向服务器查询user_id"""
-    #功能目前不可用
+    # 该功能目前不可用
     cell_phone_1 = str(cell_phone)
     msg = {}
     msg['action'] = 517
-    msg['data'] = {"region":"86","mobile":cell_phone_1}    
+    msg['data'] = {"region": "86", "mobile": cell_phone_1}
     msg["from"] = "3765C_21562167329C68E4"
     msg["mid"] = get_mid()
     msg["time"] = get_time()
     msg["to"] = "system"
     msg_json = json.dumps(msg, separators=(',', ':'))
     return msg_json
+
 
 def go_publish(GongNeng):
     """执行消息发送"""
@@ -80,7 +79,5 @@ def go_publish(GongNeng):
 
 
 
-check_in()
-#go_publish(quary_user())
-#print(quary_user())
-
+# go_publish(quary_user())
+# print(quary_user())
