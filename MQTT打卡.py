@@ -141,7 +141,7 @@ while True:
     elif fun_select == "q" or fun_select == "Q":
         sys.exit()
     else:
-        print("输入错误，请重新输入！")
+        print("---------------------输入错误，请重新输入！----------------------")
 
 
 #print(get_time_ver())
