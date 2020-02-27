@@ -22,10 +22,37 @@ def get_now_time():
 
 def get_time_ver():
     """生成补卡时间"""
-    time_ver = input("请输入补卡时间：")
-    time_str = time.strptime(time_ver, "%Y-%m-%d %H:%M:%S")
-    time_stamp = int(time.mktime(time_str))
-    return time_stamp
+    while True:
+        time_ver = input("1：补打今日上班卡    2：补打今日下班卡    D：指定补卡日期时间 \n请输入补卡时间：")
+        if time_ver == "1":
+            t = datetime.date.today()
+            h = 8
+            m = random.randint(45, 59)
+            s = random.randint(00, 59)
+            dt = str(t) + " " + str(h) + ":" + str(m) + ":" + str(s)
+            time_str = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
+            time_stamp = int(time.mktime(time_str))
+            return time_stamp
+            break
+        elif time_ver == "2":
+            t = datetime.date.today()
+            h = 17
+            m = random.randint(00, 30)
+            s = random.randint(00, 59)
+            dt = str(t) + " " + str(h) + ":" + str(m) + ":" + str(s)
+            time_str = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
+            time_stamp = int(time.mktime(time_str))
+            return time_stamp
+            break
+        elif time_ver == "d" or time_ver == "D":
+            time_ver = input("指定日期合时间的格式为：YY-MM-DD HH:MM:SS \n 请输入要补卡的日期和时间： ")
+            time_str = time.strptime(time_ver, "%Y-%m-%d %H:%M:%S")
+            time_stamp = int(time.mktime(time_str))
+            return time_stamp
+            break
+        else:
+            print("输入错误，请重新输入！")
+            continue
 
 
 def get_mid():
@@ -102,6 +129,7 @@ def go_publish(GongNeng):
     print("操作已成功!")
 
 
+"""
 while True:
     welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
     fun_select = input(welcome_title)
@@ -113,9 +141,11 @@ while True:
         go_publish(make_msg("re_check_in"))
     elif fun_select == "q" or fun_select == "Q":
         sys.exit()
-    else :
+    else:
         print("输入错误，请重新输入！")
+"""
 
+print(get_time_ver())
 
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
