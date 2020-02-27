@@ -129,7 +129,6 @@ def go_publish(GongNeng):
     print("操作已成功!")
 
 
-"""
 while True:
     welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
     fun_select = input(welcome_title)
@@ -143,9 +142,9 @@ while True:
         sys.exit()
     else:
         print("输入错误，请重新输入！")
-"""
 
-print(get_time_ver())
+
+#print(get_time_ver())
 
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
