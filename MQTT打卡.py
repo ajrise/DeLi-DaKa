@@ -15,7 +15,7 @@ topic = "device"
 
 def get_now_time():
     """获取当前时间戳"""
-    time_now = int(time.time())
+    time_now = round(time.time())
     # print(str(now))
     return time_now
 
@@ -128,7 +128,7 @@ def go_publish(GongNeng):
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
     print("操作已成功!")
 
-
+"""
 while True:
     welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
     fun_select = input(welcome_title)
@@ -143,8 +143,8 @@ while True:
     else:
         print("---------------------输入错误，请重新输入！----------------------")
 
-
-#print(get_time_ver())
+"""
+print(get_now_time())
 
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
