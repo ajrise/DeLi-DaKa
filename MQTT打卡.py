@@ -128,23 +128,24 @@ def go_publish(GongNeng):
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
     print("操作已成功!")
 
-"""
-while True:
-    welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
-    fun_select = input(welcome_title)
-    if fun_select == "1":
-        go_publish(make_msg("time_syn"))
-    elif fun_select == "2":
-        go_publish(make_msg("check_in"))
-    elif fun_select == "3":
-        go_publish(make_msg("re_check_in"))
-    elif fun_select == "q" or fun_select == "Q":
-        sys.exit()
-    else:
-        print("---------------------输入错误，请重新输入！----------------------")
 
-"""
-print(get_now_time())
+def main():
+    while True:
+        welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
+        fun_select = input(welcome_title)
+        if fun_select == "1":
+            go_publish(make_msg("time_syn"))
+        elif fun_select == "2":
+            go_publish(make_msg("check_in"))
+        elif fun_select == "3":
+            go_publish(make_msg("re_check_in"))
+        elif fun_select == "q" or fun_select == "Q":
+            sys.exit()
+        else:
+            print("---------------------输入错误，请重新输入！----------------------")
+
+
+main()
 
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
