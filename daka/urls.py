@@ -19,6 +19,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('login/',views.login,name='login'),
-    #path('daka/',views.daka,name='daka'),
+    path('login/',views.login_view,name='login'),
+    path('daka/',views.daka,name='daka'),
 ]
