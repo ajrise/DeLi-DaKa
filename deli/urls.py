@@ -18,6 +18,6 @@ from django.urls import path ,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("daka.urls")),
-    path('login/',include('daka.urls')),
+    path('', include('daka.urls')),
+    #path('login/',include('daka.urls')),
 ]
