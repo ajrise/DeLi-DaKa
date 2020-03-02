@@ -1,0 +1,5 @@
+##ignore this file##
+/target/ 
+ll_env
+__pycache__
+deli/__pycache__
