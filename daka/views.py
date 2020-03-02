@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.db import models
+from django.shortcuts import render, redirect,HttpResponseRedirect
+from . import models
 
 # Create your views here.
 
@@ -10,14 +10,19 @@ def index(request):
 
 def login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if username and password :
+        username = request.POST.get('username',None)
+        password = request.POST.get('password',None)
+        message = "所有字段都必须填写"
+        if username and password:
             username = username.strip()
-            try :
-                user = models.User.object.get(name=username)
+            try:
+                user = models.User.objects.get(name=username)
+                if user.password == password:
+                    return render(request,'index.html',{'hello':"正确"+user.name+':'+user.password+"输入:"+username+":"+password,'msg':message})    
+                else:
+                    message = "密码不正确"
             except:
-                return render(request ,'login',{'msg':'error'})
-            if user.password == password:
-                return render('index.html',{'hello':"hello"})
+                message = "用户不存在"
+
+        return render(request,'index.html',{'hello':'错误'+user.name+':'+user.password+"输入:"+username+":"+password,'msg':message})
     return render(request, 'login.html', {})
