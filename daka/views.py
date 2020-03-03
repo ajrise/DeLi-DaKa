@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect , HttpResponse ,reverse
 from . import models
 from django.contrib.auth import authenticate, login, logout
 
@@ -32,3 +32,4 @@ def daka(request):
 
 def logout_view(request):
     logout(request)
+    return HttpResponseRedirect("/")
