@@ -20,7 +20,7 @@ def login_view(request):
         else:
             return render(request, 'login.html', {'hello': "用户名或密码错误"})
     else:
-        render(request, 'login.html', {})
+        return render(request, 'login.html', {})
 
 
 def daka(request):
