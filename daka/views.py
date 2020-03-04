@@ -29,7 +29,7 @@ def daka(request):
         user_uuid = request.user.myuser.uuid
         return render(request, 'daka.html', {'msg': user_uuid})
     else:
-        return render(request, 'login.html', {})
+        return HttpResponseRedirect('/login', {})
 
 
 def logout_view(request):
