@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse, reverse
-from . import models
-from daka.models import Myuser
+from daka import models
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -27,7 +26,7 @@ def login_view(request):
 
 def daka(request):
     if request.user.is_authenticated:
-        user_uuid = models.Myuser.objects.get(username=15608066262)
+        user_uuid = request.user.myuser.uuid
         return render(request, 'daka.html', {'msg': user_uuid})
     else:
         return render(request, 'login.html', {})

@@ -1,7 +1,12 @@
 from django.contrib import admin
-from . import models
+from daka import models
 
 
-admin.site.register(models.Myuser)
+
+
+class MyuserAdmin(admin.ModelAdmin):
+    list_display = ('id','name','c_time','uuid')
+    search_fields = ('name','uuid')
 
 # Register your models here.
+admin.site.register(models.Myuser,MyuserAdmin)
