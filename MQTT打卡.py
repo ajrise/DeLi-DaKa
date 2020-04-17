@@ -5,6 +5,8 @@ import json
 import random
 import user_info
 import sys
+from chinese_calendar import is_workday
+
 
 server = "device.delicloud.com"
 dqgzb_device = "3765C_21562167329C68E4"
@@ -18,6 +20,29 @@ def get_now_time():
     time_now = round(time.time())
     # print(str(now))
     return time_now
+
+def get_workday(start,end):
+    start = datetime.datetime.strptime(start, '%Y.%m.%d')
+    end = datetime.datetime.strptime(end, '%Y.%m.%d')
+    workday = []
+    while start <= end:
+        if is_workday(start):
+            h = 8
+            m = random.randint(45, 59)
+            s = random.randint(00, 59)
+            start = start.replace(hour = h,minute = m,second = s)
+            tt = time.strptime(str(start),"%Y-%m-%d %H:%M:%S")
+            time_stamp = int(time.mktime(tt))
+            workday.append(time_stamp)
+            h = 17
+            m = random.randint(00, 30)
+            s = random.randint(00, 59)
+            start = start.replace(hour = h,minute = m,second = s)
+            tt = time.strptime(str(start),"%Y-%m-%d %H:%M:%S")
+            time_stamp = int(time.mktime(tt))
+            workday.append(time_stamp)                        
+        start += datetime.timedelta(days=1)
+    return workday
 
 
 def get_time_ver():
@@ -45,8 +70,8 @@ def get_time_ver():
             return time_stamp
             break
         elif time_ver == "d" or time_ver == "D":
-            time_ver = input("指定日期合时间的格式为：YY-MM-DD HH:MM:SS \n 请输入要补卡的日期和时间： ")
-            time_str = time.strptime(time_ver, "%Y-%m-%d %H:%M:%S")
+            time_ver = input("指定日期合时间的格式为：YY.MM.DD HH.MM.SS \n 请输入要补卡的日期和时间： ")
+            time_str = time.strptime(time_ver, "%Y.%m.%d %H.%M.%S")
             time_stamp = int(time.mktime(time_str))
             return time_stamp
             break
@@ -75,6 +100,8 @@ def make_checkin(user_id, ck_time):
         time = get_now_time()
     elif ck_time == "re_ck":
         time = get_time_ver()
+    else:
+        time = ck_time
     user_temp = {"check_time": time, "check_type": "fp",
                  "user_id": user_id}
     user_temp1 = [user_temp]
@@ -84,7 +111,7 @@ def make_checkin(user_id, ck_time):
 
 
 def make_msg(fun_id):
-    """构建消息data数据"""
+    """构建消息payload数据"""
     msg = {}
     if fun_id == "check_in":
         msg['action'] = 300
@@ -129,9 +156,30 @@ def go_publish(GongNeng):
     print("操作已成功!")
 
 
+def circle_checkin(start_date, end_date, user_id):
+    """执行循环补打操作"""
+    workday_arry = get_workday(start_date, end_date)
+    msg = {}
+    c_data = []
+    for i in workday_arry:
+        c_checkin = make_checkin(user_id, i)
+        msg['action'] = 300
+        msg['data'] = c_checkin
+        msg["to"] = "377900597703081984"
+        msg["time"] = msg['data']['payload']['users'][0]['check_time']
+        msg["from"] = "3765C_21562167329C68E4"
+        msg["mid"] = get_mid()
+        msg_json = json.dumps(msg, separators=(',', ':'))
+        c_data.append(msg_json)
+    for msg in c_data:
+        print (msg)
+        go_publish(msg)
+
+
+
 def main():
     while True:
-        welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   Q、退出     \n 请输入："
+        welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   0、批量补打卡   Q、退出     \n 请输入："
         fun_select = input(welcome_title)
         if fun_select == "1":
             go_publish(make_msg("time_syn"))
@@ -139,14 +187,20 @@ def main():
             go_publish(make_msg("check_in"))
         elif fun_select == "3":
             go_publish(make_msg("re_check_in"))
+
+        elif fun_select == "0":
+            start_date = input("请输入补打起始日期：")
+            end_date = input("请输入结束日期：")
+            circle_checkin(start_date, end_date, user_info.get_user())
         elif fun_select == "q" or fun_select == "Q":
             sys.exit()
+
         else:
             print("---------------------输入错误，请重新输入！----------------------")
 
 
 main()
-
+#print(get_workday('2020.4.10','2020.4.18'))
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
 #print (make_msg("re_check_in"))

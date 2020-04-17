@@ -19,8 +19,8 @@ def add_user(new_user, new_user_id):
 
 
 def get_user():
-    user_db = load_user()
-    user_name_input = input("请输入用户名：")
+
+    """user_name_input = input("请输入用户名：")
 
     if user_name_input in user_db:
         user_id = user_db.get(user_name_input)
@@ -32,4 +32,8 @@ def get_user():
             add_user(user_name_input, new_user_id1)
         else:
             return "quit"
+"""
+    user_id = "598529995907792896"
+    return user_id
+
 
