@@ -140,7 +140,7 @@ def go_publish(GongNeng):
     mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
     cf_cktime = datetime.datetime.fromtimestamp(GongNeng.get('time'))
-    print(str(cf_cktime) + "  打卡操作已成功!")
+    print(str(cf_cktime) + "  操作已成功!")
 
 
 def circle_checkin(start_date, end_date, user_id):
@@ -161,17 +161,28 @@ def circle_checkin(start_date, end_date, user_id):
     for mm in c_data:
         go_publish(mm)
 
+def time_syn():
+    msg = make_msg("time_syn")
+    print (msg)
+    go_publish(msg)
+
+def check_in():
+        msg = make_msg("check_in")
+        go_publish(msg)
+
+
 
 def main():
     while True:
         welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   0、批量补打卡   Q、退出     \n 请输入："
         fun_select = input(welcome_title)
         if fun_select == "1":
-            go_publish(make_msg("time_syn"))
+            time_syn()
         elif fun_select == "2":
-            go_publish(make_msg("check_in"))
+            check_in()
         elif fun_select == "3":
-            go_publish(make_msg("re_check_in"))
+            msg = make_msg("re_check_in")
+            go_publish(msg)
         elif fun_select == "0":
             start_date = input("请输入补打起始日期：")
             end_date = input("请输入结束日期：")
