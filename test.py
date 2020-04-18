@@ -2,7 +2,7 @@ import datetime
 from chinese_calendar import is_workday, is_holiday
 import random
 import time
-#is_workday(april_last)
+# is_workday(april_last)
 
 """
 start = input ("请输入开始日期：")
@@ -29,7 +29,7 @@ print (tt)
 h = 8
 tt = tt.replace(hour = h)
 print (tt)
-"""
+
 
 def get_workday(start,end):
     start = datetime.datetime.strptime(start, '%Y.%m.%d')
@@ -51,3 +51,9 @@ def get_workday(start,end):
     return workday
 
 get_workday('2020.4.10','2020.4.18')
+'"""
+
+msg = {"action": 300, "data": {"cmd": "checkin", "payload": {"users": [{"check_time": 1587115138, "check_type": "fp", "user_id": "598529995907792896"}]}},
+       "to": "377900597703081984", "time": 1587115138, "from": "3765C_21562167329C68E4", "mid": "1582282748929186295"}
+tt = msg.get('time')
+print (tt)

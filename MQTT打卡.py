@@ -153,7 +153,8 @@ def go_publish(GongNeng):
     """执行消息发送"""
     mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
-    print("操作已成功!")
+    cf_cktime = datetime.datetime.fromtimestamp(GongNeng.get('time'))
+    print(str(cf_cktime) + "  打卡操作已成功!")
 
 
 def circle_checkin(start_date, end_date, user_id):
@@ -173,7 +174,7 @@ def circle_checkin(start_date, end_date, user_id):
         c_data.append(msg_json)
     for msg in c_data:
         print (msg)
-        go_publish(msg)
+        #go_publish(msg)
 
 
 
@@ -199,11 +200,13 @@ def main():
             print("---------------------输入错误，请重新输入！----------------------")
 
 
-main()
-#print(get_workday('2020.4.10','2020.4.18'))
+#main()
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
 #print (make_msg("re_check_in"))
 # go_publish(quary_user())
 # print(quary_user())
 #print (get_time_ver())
+msg = {"action": 300, "data": {"cmd": "checkin", "payload": {"users": [{"check_time": 1587115138, "check_type": "fp", "user_id": "598529995907792896"}]}},
+       "to": "377900597703081984", "time": 1587115138, "from": "3765C_21562167329C68E4", "mid": "1582282748929186295"}
+go_publish(msg)
