@@ -21,7 +21,8 @@ def get_now_time():
     # print(str(now))
     return time_now
 
-def get_workday(start,end):
+
+def get_workday(start, end):
     start = datetime.datetime.strptime(start, '%Y.%m.%d')
     end = datetime.datetime.strptime(end, '%Y.%m.%d')
     workday = []
@@ -30,17 +31,17 @@ def get_workday(start,end):
             h = 8
             m = random.randint(45, 59)
             s = random.randint(00, 59)
-            start = start.replace(hour = h,minute = m,second = s)
-            tt = time.strptime(str(start),"%Y-%m-%d %H:%M:%S")
+            start = start.replace(hour=h, minute=m, second=s)
+            tt = time.strptime(str(start), "%Y-%m-%d %H:%M:%S")
             time_stamp = int(time.mktime(tt))
             workday.append(time_stamp)
             h = 17
             m = random.randint(00, 30)
             s = random.randint(00, 59)
-            start = start.replace(hour = h,minute = m,second = s)
-            tt = time.strptime(str(start),"%Y-%m-%d %H:%M:%S")
+            start = start.replace(hour=h, minute=m, second=s)
+            tt = time.strptime(str(start), "%Y-%m-%d %H:%M:%S")
             time_stamp = int(time.mktime(tt))
-            workday.append(time_stamp)                        
+            workday.append(time_stamp)
         start += datetime.timedelta(days=1)
     return workday
 
@@ -134,21 +135,6 @@ def make_msg(fun_id):
     return msg_json
 
 
-def quary_user(cell_phone):
-    """通过手机号向服务器查询user_id"""
-    # 该功能目前不可用
-    cell_phone_1 = str(cell_phone)
-    msg = {}
-    msg["mid"] = get_mid()
-    msg["from"] = "3765C_21562167329C68E4"
-    msg["to"] = "system"
-    msg["time"] = get_now_time()
-    msg['action'] = 517
-    msg['data'] = {"region": "86", "mobile": cell_phone_1}
-    msg_json = json.dumps(msg, separators=(',', ':'))
-    return msg_json
-
-
 def go_publish(GongNeng):
     """执行消息发送"""
     mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
@@ -172,10 +158,8 @@ def circle_checkin(start_date, end_date, user_id):
         msg["mid"] = get_mid()
         msg_json = json.dumps(msg, separators=(',', ':'))
         c_data.append(msg_json)
-    for msg in c_data:
-        print (msg)
-        #go_publish(msg)
-
+    for mm in c_data:
+        go_publish(mm)
 
 
 def main():
@@ -188,7 +172,6 @@ def main():
             go_publish(make_msg("check_in"))
         elif fun_select == "3":
             go_publish(make_msg("re_check_in"))
-
         elif fun_select == "0":
             start_date = input("请输入补打起始日期：")
             end_date = input("请输入结束日期：")
@@ -200,13 +183,10 @@ def main():
             print("---------------------输入错误，请重新输入！----------------------")
 
 
-#main()
+main()
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
 #print (make_msg("re_check_in"))
 # go_publish(quary_user())
 # print(quary_user())
 #print (get_time_ver())
-msg = {"action": 300, "data": {"cmd": "checkin", "payload": {"users": [{"check_time": 1587115138, "check_type": "fp", "user_id": "598529995907792896"}]}},
-       "to": "377900597703081984", "time": 1587115138, "from": "3765C_21562167329C68E4", "mid": "1582282748929186295"}
-go_publish(msg)
