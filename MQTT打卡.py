@@ -139,7 +139,7 @@ def go_publish(GongNeng):
     """执行消息发送"""
     mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
                 keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
-    cf_cktime = datetime.datetime.fromtimestamp(GongNeng.get('time'))
+    cf_cktime = datetime.datetime.fromtimestamp(GongNeng['time'])
     print(str(cf_cktime) + "  操作已成功!")
 
 
@@ -161,15 +161,16 @@ def circle_checkin(start_date, end_date, user_id):
     for mm in c_data:
         go_publish(mm)
 
+
 def time_syn():
-    msg = make_msg("time_syn")
-    print (msg)
-    go_publish(msg)
+    msgg = make_msg("time_syn")
+    print(msgg)
+    go_publish(msgg)
+
 
 def check_in():
-        msg = make_msg("check_in")
-        go_publish(msg)
-
+    msg = make_msg("check_in")
+    go_publish(msg)
 
 
 def main():
