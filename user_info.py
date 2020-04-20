@@ -18,7 +18,7 @@ def add_user(new_user, new_user_id):
     print (user_db)
 
 
-def get_user():
+def get_id():
 
     """user_name_input = input("请输入用户名：")
 
@@ -36,4 +36,23 @@ def get_user():
     user_id = "598529995907792896"
     return user_id
 
+# def get_user(id):
+#     user_db = load_user()
+#     username = user_db.get(id)
+#     return username
+# print(get_user('598529995907792896'))
 
+def find_id(input):
+    
+
+
+def last_login(fun_id):
+    user_db = load_user()
+    if fun_id == 0:
+        last_login = user_db.get('last_login')
+    elif fun_id == 1:
+        with open ("user.json",'w') as user_obj:
+            user_db['last_login'] = ''
+            user_obj.write(json.dumps(user_db))
+            user_obj.close()
+    return last_login

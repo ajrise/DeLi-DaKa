@@ -14,6 +14,12 @@ dq_auth = {'username': '3765C',
            'password': '0A8E9F042864297FB6B02AB530494870'}
 topic = "device"
 
+class Bcolors:
+    HEADER = '\033[31m'
+    ENDC = '\033[0m'
+
+
+
 
 def get_now_time():
     """获取当前时间戳"""
@@ -116,7 +122,7 @@ def make_msg(fun_id):
     msg = {}
     if fun_id == "check_in":
         msg['action'] = 300
-        msg['data'] = make_checkin(user_info.get_user(), "now")
+        msg['data'] = make_checkin(user_info.get_id(), "now")
         msg["to"] = "377900597703081984"
         msg["time"] = get_now_time()
     elif fun_id == "time_syn":
@@ -125,7 +131,7 @@ def make_msg(fun_id):
         msg["time"] = get_now_time()
     elif fun_id == "re_check_in":
         msg['action'] = 300
-        msg['data'] = make_checkin(user_info.get_user(), "re_ck")
+        msg['data'] = make_checkin(user_info.get_id(), "re_ck")
         msg["to"] = "377900597703081984"
         msg["time"] = msg['data']['payload']['users'][0]['check_time']
 
@@ -137,10 +143,10 @@ def make_msg(fun_id):
 
 def go_publish(GongNeng):
     """执行消息发送"""
-    mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
-                keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
-    cf_cktime = datetime.datetime.fromtimestamp(GongNeng['time'])
-    print(str(cf_cktime) + "  操作已成功!")
+    # mqtt.single(topic, payload=GongNeng, qos=1, retain=False, hostname=server, port=1883, client_id=dqgzb_device,
+    #              keepalive=60, will=None, auth=dq_auth, tls=None, transport="tcp")
+    msg = json.loads(GongNeng)
+    return msg
 
 
 def circle_checkin(start_date, end_date, user_id):
@@ -163,31 +169,47 @@ def circle_checkin(start_date, end_date, user_id):
 
 
 def time_syn():
-    msgg = make_msg("time_syn")
-    print(msgg)
-    go_publish(msgg)
+    try:
+        msg = make_msg("time_syn")
+        status = go_publish(msg)
+        cf_cktime = datetime.datetime.fromtimestamp(status["time"])
+        print ('\n当前时间为 ' + str(cf_cktime) +" 系统链接正常!\n")
+    except:
+        print(Bcolors.HEADER + "系统链接异常，请检查网络状态！" + Bcolors.ENDC)
 
 
 def check_in():
-    msg = make_msg("check_in")
+    try:
+        msg = make_msg("check_in")
+        status = go_publish(msg)
+        cf_cktime = datetime.datetime.fromtimestamp(status["time"])
+        userId = status['data']['payload']['users'][0]['user_id']
+        print (userId)
+        username = user_info.get_user(userId)
+        print (username)
+        print ("用户" + str(username) + " " + str(cf_cktime) + "系统连接正常")
+    except:
+        print(Bcolors.HEADER + "系统链接异常，请检查网络状态！" + Bcolors.ENDC)
+
+def re_check_in():
+    msg = make_msg("re_check_in")
     go_publish(msg)
 
 
 def main():
     while True:
-        welcome_title = "请选择需要进行的操作：\n 1、同步时间（确定系统状态）   2、立即打卡     3、补打卡   0、批量补打卡   Q、退出     \n 请输入："
+        welcome_title = "请选择需要进行的操作：\n 1、确定系统状态   2、立即打卡     3、补打卡   0、批量补打卡   Q、退出     \n 请输入："
         fun_select = input(welcome_title)
         if fun_select == "1":
             time_syn()
         elif fun_select == "2":
             check_in()
         elif fun_select == "3":
-            msg = make_msg("re_check_in")
-            go_publish(msg)
+            re_check_in()
         elif fun_select == "0":
             start_date = input("请输入补打起始日期：")
             end_date = input("请输入结束日期：")
-            circle_checkin(start_date, end_date, user_info.get_user())
+            circle_checkin(start_date, end_date, user_info.get_id())
         elif fun_select == "q" or fun_select == "Q":
             sys.exit()
 
@@ -195,7 +217,26 @@ def main():
             print("---------------------输入错误，请重新输入！----------------------")
 
 
-main()
+def log_in():
+    print("系统环境检测正常!")
+    time_syn()
+    print("检查登录数据中.......",end = ' ')
+    login = user_info.last_login(0)
+    if login == None :
+        input('请输入手机号码：')
+        user_id = 
+
+
+    print("存在登录数据")
+    
+log_in()
+
+
+
+
+
+
+#main()
 #print (make_msg("time_syn"))
 #print (make_msg("check_in"))
 #print (make_msg("re_check_in"))

@@ -8,11 +8,11 @@ import json
 """
 start = input ("请输入开始日期：")
 end = input("请输入结束日期：")
- 
+
 datestart = datetime.datetime.strptime(start, '%Y.%m.%d')
 dateend = datetime.datetime.strptime(end, '%Y.%m.%d')
-workday = [] 
-dalta= datetime.timedelta(days=1) 
+workday = []
+dalta= datetime.timedelta(days=1)
 while datestart <= dateend:
     if is_workday(datestart):
         h = 8
@@ -22,7 +22,7 @@ while datestart <= dateend:
         print (datestart)
         workday.append(datestart)
     datestart += dalta
-print (workday)   
+print (workday)
 
 tt = "2020.5.1"
 tt = datetime.datetime.strptime(tt,'%Y.%m.%d')
@@ -30,13 +30,12 @@ print (tt)
 h = 8
 tt = tt.replace(hour = h)
 print (tt)
-
-
-msg = {"action": 300, "data": {"cmd": "checkin", "payload": {"users": [{"check_time": 1587115138, "check_type": "fp", "user_id": "598529995907792896"}]}},
-       "to": "377900597703081984", "time": 1587115138, "from": "3765C_21562167329C68E4", "mid": "1582282748929186295"}
-tt = msg.get('time')
-print (tt)
 """
+
+# msg = {"action": 300, "data": {"cmd": "checkin", "payload": {"users": [{"check_time": 1587115138, "check_type": "fp", "user_id": "598529995907792896"}]}},
+#        "to": "377900597703081984", "time": 1587115138, "from": "3765C_21562167329C68E4", "mid": "1582282748929186295"}
+# tt = msg.get('time')
+# print (tt)
 
 
 def get_workday(start, end):
@@ -63,7 +62,6 @@ def get_workday(start, end):
     return workday
 
 
-
 def make_checkin(user_id, ck_time):
     """构建签到data数据"""
     if ck_time == "now":
@@ -80,9 +78,6 @@ def make_checkin(user_id, ck_time):
     return data
 
 
-
-
-
 def circle_checkin(start_date, end_date, user_id):
     """执行循环补打操作"""
     workday_arry = get_workday(start_date, end_date)
@@ -95,13 +90,21 @@ def circle_checkin(start_date, end_date, user_id):
         msg["to"] = "377900597703081984"
         msg["time"] = msg['data']['payload']['users'][0]['check_time']
         msg["from"] = "3765C_21562167329C68E4"
-        #msg["mid"] = get_mid()
+        # msg["mid"] = get_mid()
         msg_json = json.dumps(msg, separators=(',', ':'))
         c_data.append(msg_json)
+        # print (c_data)
+
+    for i in c_data:
+        mmsg = json.loads(i)
+        mmmsg = mmsg["time"]
+        cf_cktime = datetime.datetime.fromtimestamp(mmmsg)
+        print(cf_cktime)
     return c_data
-
-
-    #for mm in c_data:
+    # for mm in c_data:
     #    go_publish(mm)
 
-print(circle_checkin('2020.4.10','2020.4.18','598529995907792896'))
+
+circle_checkin('2020.4.10', '2020.4.18', '598529995907792896')
+
+
